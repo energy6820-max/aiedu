@@ -1,2 +1,820 @@
-hello! 하이
-good!!
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>브랜드 필름 시공</title>
+    <style>
+      :root {
+        --bg: #f6f2ee;
+        --panel: #fffdfb;
+        --text: #1a1715;
+        --muted: #5f5854;
+        --primary: #a86d4d;
+        --primary-dark: #683c2a;
+        --primary-soft: #f0e0d1;
+        --accent: #d9b18a;
+        --line: rgba(77, 55, 46, 0.12);
+        --shadow: 0 26px 60px rgba(45, 31, 25, 0.12);
+        --gold: #c89d70;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: "Noto Sans KR", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(214, 171, 134, 0.18), transparent 28%),
+          linear-gradient(180deg, #f9f5f3 0%, #f5efe9 100%);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .container {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(255,255,255,0.75);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(104, 60, 42, 0.08);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 84px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--primary), #d8aa82);
+        position: relative;
+        box-shadow: inset 0 0 0 2px rgba(255,255,255,0.55);
+      }
+
+      .brand-mark::before {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255,255,255,0.95);
+        border-top: none;
+        border-left: none;
+        right: 7px;
+        top: 9px;
+        transform: rotate(-45deg);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        font-size: 0.96rem;
+        color: var(--muted);
+      }
+
+      .nav a:hover { color: var(--primary-dark); }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 24px;
+        background: linear-gradient(135deg, var(--primary), #cb8b62);
+        color: white;
+        border-radius: 999px;
+        font-weight: 700;
+        box-shadow: 0 16px 32px rgba(128, 79, 60, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 18px 36px rgba(128, 79, 60, 0.24);
+      }
+
+      .hero {
+        position: relative;
+        background: linear-gradient(180deg, rgba(247, 240, 234, 1) 0%, rgba(244, 233, 224, 1) 100%);
+        overflow: hidden;
+      }
+
+      .hero .container {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 40px;
+        align-items: center;
+        min-height: 720px;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 15% 30%, rgba(219, 181, 143, 0.18), transparent 20%),
+          radial-gradient(circle at 70% 0%, rgba(130, 94, 74, 0.08), transparent 24%);
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(168, 109, 77, 0.1);
+        color: var(--primary-dark);
+        font-weight: 700;
+        font-size: 0.8rem;
+        border: 1px solid rgba(168, 109, 77, 0.15);
+      }
+
+      h1 {
+        margin: 24px 0 18px;
+        font-size: clamp(2.8rem, 4vw, 5rem);
+        line-height: 1.04;
+        letter-spacing: -0.06em;
+      }
+
+      .hero-copy p {
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.8;
+        max-width: 560px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 22px;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--text);
+        font-weight: 700;
+      }
+
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-top: 36px;
+      }
+
+      .stat {
+        min-width: 120px;
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 2rem;
+        letter-spacing: -0.05em;
+      }
+
+      .stat span {
+        display: block;
+        color: var(--muted);
+      }
+
+      .hero-visual {
+        position: relative;
+        display: grid;
+        place-items: center;
+      }
+
+      .room-card {
+        position: relative;
+        width: min(100%, 480px);
+        padding: 24px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.35));
+        border: 1px solid rgba(122, 75, 50, 0.12);
+        border-radius: 30px;
+        box-shadow: var(--shadow);
+      }
+
+      .room {
+        position: relative;
+        height: 500px;
+        border-radius: 24px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #ece4df 0%, #d7bfac 100%);
+      }
+
+      .wall {
+        position: absolute;
+        inset: 0 0 120px 0;
+        background: linear-gradient(180deg, #f9f5f1 0%, #e7d6c9 100%);
+      }
+
+      .window {
+        position: absolute;
+        left: 60px;
+        top: 58px;
+        width: 150px;
+        height: 130px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, #cfeaf6, #79b5d8);
+        border: 10px solid #f6efe9;
+        box-shadow: inset 0 0 0 7px rgba(88, 118, 165, 0.15);
+      }
+
+      .window::before, .window::after {
+        content: "";
+        position: absolute;
+        background: rgba(255,255,255,0.4);
+      }
+
+      .window::before {
+        left: 50%;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        transform: translateX(-50%);
+      }
+
+      .window::after {
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 4px;
+        transform: translateY(-50%);
+      }
+
+      .sofa {
+        position: absolute;
+        left: 52%;
+        bottom: 66px;
+        transform: translateX(-50%);
+        width: 280px;
+        height: 110px;
+        background: linear-gradient(180deg, #9d674d, #6f3d2c);
+        border-radius: 24px 24px 18px 18px;
+      }
+
+      .sofa::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 26px;
+        height: 18px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.15);
+      }
+
+      .table {
+        position: absolute;
+        left: 50%;
+        bottom: 28px;
+        transform: translateX(-50%);
+        width: 180px;
+        height: 18px;
+        background: #8b5a3e;
+        border-radius: 18px;
+      }
+
+      .table::before {
+        content: "";
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        top: -55px;
+        bottom: auto;
+        height: 58px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #caa789, #9c7758);
+      }
+
+      .lamp {
+        position: absolute;
+        right: 84px;
+        top: 44px;
+        width: 90px;
+        height: 210px;
+      }
+
+      .lamp::before {
+        content: "";
+        position: absolute;
+        left: 42px;
+        top: 0;
+        width: 6px;
+        height: 110px;
+        background: #56514c;
+      }
+
+      .lamp::after {
+        content: "";
+        position: absolute;
+        left: 14px;
+        top: 108px;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #ffe8c4, #e7ba6b 60%, #d88b4b 100%);
+        box-shadow: 0 0 30px rgba(250, 196, 115, 0.5);
+      }
+
+      .mini-badge {
+        position: absolute;
+        right: 18px;
+        bottom: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid rgba(122, 75, 50, 0.1);
+        box-shadow: var(--shadow);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .mini-badge::before {
+        content: "✓";
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #e6f8ea;
+        color: #1f8d57;
+      }
+
+      section {
+        padding: 90px 0;
+      }
+
+      .section-head {
+        margin-bottom: 28px;
+      }
+
+      .section-head small {
+        color: var(--primary-dark);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+
+      .section-head h2 {
+        margin: 10px 0 8px;
+        font-size: clamp(2rem, 3vw, 3rem);
+        letter-spacing: -0.05em;
+      }
+
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .card {
+        padding: 30px 24px;
+        background: rgba(255,255,255,0.72);
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        box-shadow: 0 14px 28px rgba(76, 55, 42, 0.04);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 36px rgba(76, 55, 42, 0.08);
+      }
+
+      .icon {
+        width: 60px;
+        height: 60px;
+        display: grid;
+        place-items: center;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(168,109,77,0.12), rgba(217,177,138,0.28));
+        color: var(--primary-dark);
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+        border: 1px solid rgba(168,109,77,0.08);
+      }
+
+      .card h3 {
+        margin: 0 0 10px;
+        font-size: 1.4rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .process {
+        background: linear-gradient(180deg, #f4efe9, #fbf7f3);
+      }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 22px;
+        margin-top: 28px;
+      }
+
+      .step {
+        position: relative;
+        padding: 26px 22px 22px;
+        background: rgba(255,255,255,0.86);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        box-shadow: 0 10px 26px rgba(80, 58, 48, 0.04);
+      }
+
+      .step-number {
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        background: #f4e5d8;
+        color: var(--primary-dark);
+        font-weight: 800;
+        margin-bottom: 14px;
+      }
+
+      .step h3 {
+        margin: 0 0 8px;
+        font-size: 1.2rem;
+      }
+
+      .step p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .portfolio {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .project {
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        box-shadow: 0 12px 30px rgba(45, 28, 20, 0.05);
+      }
+
+      .project-image {
+        height: 230px;
+        background: linear-gradient(135deg, #d9cab5, #f3e9df 45%, #d7bfac 100%);
+        position: relative;
+        border-bottom: 1px solid rgba(77, 55, 46, 0.1);
+      }
+
+      .project-image::before,
+      .project-image::after {
+        content: "";
+        position: absolute;
+      }
+
+      .project-image::before {
+        left: 48px;
+        right: 48px;
+        bottom: 36px;
+        height: 120px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, #f8f1ea, #e1cbba);
+      }
+
+      .project-image::after {
+        left: 90px;
+        right: 90px;
+        bottom: 52px;
+        height: 70px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #dfb291, #b57a5c);
+      }
+
+      .project-info {
+        padding: 24px;
+      }
+
+      .project-info h3 {
+        margin: 0 0 10px;
+        font-size: 1.35rem;
+      }
+
+      .project-info p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .tag {
+        display: inline-flex;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(168,109,77,0.1);
+        color: var(--primary-dark);
+        font-size: 0.8rem;
+        font-weight: 700;
+        border: 1px solid rgba(168,109,77,0.08);
+      }
+
+      .contact-wrap {
+        background: linear-gradient(135deg, #2a1c17, #5a3a2e 50%, #8c5d42);
+        border-radius: 30px;
+        padding: 38px 40px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .contact-wrap h3 {
+        margin: 0 0 8px;
+        font-size: clamp(1.8rem, 2vw, 2.5rem);
+      }
+
+      .contact-wrap p {
+        margin: 0;
+        color: rgba(255,255,255,0.78);
+      }
+
+      footer {
+        padding: 30px 0 60px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 980px) {
+        .hero .container,
+        .features,
+        .timeline,
+        .portfolio {
+          grid-template-columns: 1fr;
+        }
+
+        .hero .container {
+          min-height: auto;
+          padding-top: 40px;
+          padding-bottom: 40px;
+        }
+
+        .nav {
+          display: none;
+        }
+
+        .contact-wrap {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <span>BRAND FILM</span>
+        </div>
+
+        <nav class="nav">
+          <a href="#about">회사소개</a>
+          <a href="#services">시공서비스</a>
+          <a href="#process">진행절차</a>
+          <a href="#portfolio">시공사례</a>
+          <a href="#contact">문의하기</a>
+        </nav>
+
+        <a class="cta" href="#contact">무료견적</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="about">
+        <div class="container">
+          <div class="hero-copy">
+            <div class="eyebrow">전문 인테리어 필름 시공</div>
+            <h1>집의 분위기를<br />새롭게 바꾸는 필름 시공</h1>
+            <p>
+              고급스러운 마감과 내구성 있는 시공으로 거실, 침실, 사무실까지
+              공간의 개성과 편안함을 동시에 살려드립니다. 세련된 디자인과
+              안전한 시공 방식으로 만족스러운 결과를 만듭니다.
+            </p>
+
+            <div class="hero-actions">
+              <a class="cta" href="#contact">상담 신청</a>
+              <a class="secondary" href="#portfolio">시공 사례 보기</a>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <strong>1,200+</strong>
+                <span>완료 시공</span>
+              </div>
+              <div class="stat">
+                <strong>98%</strong>
+                <span>재방문 고객</span>
+              </div>
+              <div class="stat">
+                <strong>5년</strong>
+                <span>시공 경력</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="room-card">
+              <div class="room">
+                <div class="wall"></div>
+                <div class="window"></div>
+                <div class="lamp"></div>
+                <div class="sofa"></div>
+                <div class="table"></div>
+                <div class="mini-badge">시공 완료</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services">
+        <div class="container">
+          <div class="section-head">
+            <small>Services</small>
+            <h2>인테리어 필름 시공 서비스</h2>
+            <p>
+              공간별 특성에 맞춘 맞춤 시공으로 단순한 보호를 넘어 디자인까지
+              완성해드립니다.
+            </p>
+          </div>
+
+          <div class="features">
+            <article class="card">
+              <div class="icon">✦</div>
+              <h3>도어·창문 필름</h3>
+              <p>
+                유리에 스며드는 자외선 차단과 프라이버시 보호를 한 번에 해결하는
+                고급 필름 시공입니다.
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="icon">▣</div>
+              <h3>벽면 인테리어 필름</h3>
+              <p>
+                빈 벽을 감각적인 분위기로 바꾸고, 깔끔한 마감으로 공간의
+                완성도를 높여드립니다.
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="icon">◌</div>
+              <h3>가구·가전 보호필름</h3>
+              <p>
+                내구성이 우수한 보호필름으로 마모, 흠집, 생활 흔적을 줄이고 오래
+                사용할 수 있게 도와드립니다.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="process" id="process">
+        <div class="container">
+          <div class="section-head">
+            <small>Process</small>
+            <h2>간단하고 안전한 시공 프로세스</h2>
+          </div>
+
+          <div class="timeline">
+            <div class="step">
+              <div class="step-number">1</div>
+              <h3>상담</h3>
+              <p>공간 상황과 원하는 스타일을 먼저 확인하여 맞춤 시공 계획을 세웁니다.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <h3>시공안</h3>
+              <p>필름 타입, 색상, 시공 범위를 함께 정리하고 최적의 디자인을 제안합니다.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <h3>시공</h3>
+              <p>전문 장비와 꼼꼼한 작업으로 균일한 마감과 깔끔한 라인을 완성합니다.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <h3>점검</h3>
+              <p>완료 후 세밀한 점검으로 마감 상태와 내구성을 확인하고 최종 확인합니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="portfolio">
+        <div class="container">
+          <div class="section-head">
+            <small>Portfolio</small>
+            <h2>시공 사례</h2>
+            <p>다양한 공간에 맞춘 실전 스타일링으로 고객 만족도를 높이고 있습니다.</p>
+          </div>
+
+          <div class="portfolio">
+            <article class="project">
+              <div class="project-image"></div>
+              <div class="project-info">
+                <h3>모던 아파트 거실 리모델링</h3>
+                <p>유리창 필름과 벽면 인테리어 필름으로 밝고 세련된 분위기를 완성했습니다.</p>
+                <span class="tag">거실 시공</span>
+              </div>
+            </article>
+
+            <article class="project">
+              <div class="project-image" style="background: linear-gradient(135deg, #d9d0c7, #f3ebdf 50%, #d5baa9 100%);"></div>
+              <div class="project-info">
+                <h3>오피스 프라이버시 개선</h3>
+                <p>사무실에 맞는 고급톤 필름으로 분위기와 업무 효율성을 동시에 개선했습니다.</p>
+                <span class="tag">사무공간</span>
+              </div>
+            </article>
+
+            <article class="project">
+              <div class="project-image" style="background: linear-gradient(135deg, #d3c7b7, #efe2d6 50%, #cab19d 100%);"></div>
+              <div class="project-info">
+                <h3>침실 프라이버시 필름</h3>
+                <p>부드러운 톤의 필름으로 조용하고 아늑한 분위기 속 안정감 있는 공간을 완성했습니다.</p>
+                <span class="tag">침실 시공</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="container">
+          <div class="contact-wrap">
+            <div>
+              <h3>우리 집, 사무실에 맞는 시공을 원하시나요?</h3>
+              <p>무료 상담 받고 특별한 디자인 제안을 받아보세요.</p>
+            </div>
+            <a class="cta" href="tel:010-1234-5678">010-1234-5678</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">© 2026 BRAND FILM. All rights reserved.</div>
+    </footer>
+  </body>
+</html>
